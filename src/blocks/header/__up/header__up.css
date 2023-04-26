@@ -1,0 +1,14 @@
+.header__up {
+  margin-top: 45px;
+  margin-bottom: 41px;
+  padding: 0 0 41px 0px;
+  border-bottom: 1px solid rgba(84, 84, 84, 0.7);
+}
+
+@media (max-width: 380px) {
+  .header__up {
+    margin: 28px 0 42px 0;
+    padding-bottom: 31px;
+    padding: 0 0 27px 31px;
+  }
+}
