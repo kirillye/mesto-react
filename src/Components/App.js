@@ -15,34 +15,25 @@ function App() {
   const [isAcceptPopupOpen, openAcceptPopup] = useState(false);
   const [selectedCard, setSelectCard] = useState("");
 
-  function openPopup(elem) {
-    document.querySelector(elem).classList.add("popup_opend");
-  }
-
   return (
     <>
       <Header logo={mainLogo} />
       <Main
         avatar={userAvatar}
         handleEditAvatarClick={(e) => {
-          openPopup(".popup_type_form-avatar");
           openEditAvatar(true);
         }}
         handleEditProfileClick={(e) => {
-          openPopup(".popup_type_form-user");
           openEditProfile(true);
         }}
         handleAddPlaceClick={(e) => {
-          openPopup(".popup_type_form-article");
           openAddPlace(true);
         }}
         handleCardClick={(link) => {
-          openPopup(".popup_type_image");
           openImagePopup(true);
           setSelectCard(link);
         }}
         handleDeleteCard={() => {
-          openPopup(".popup_type_accept");
           openAcceptPopup(true);
         }}
       />
