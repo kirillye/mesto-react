@@ -15,6 +15,14 @@ function App() {
   const [isAcceptPopupOpen, openAcceptPopup] = useState(false);
   const [selectedCard, setSelectCard] = useState("");
 
+  function closeAllPopups() {
+    openEditAvatar(false);
+    openEditProfile(false);
+    openAddPlace(false);
+    openImagePopup(false);
+    openAcceptPopup(false);
+  }
+
   return (
     <>
       <Header logo={mainLogo} />
@@ -41,9 +49,7 @@ function App() {
         title="Обновить аватар"
         name="form-avatar"
         isOpen={isEditAvatarPopupOpen}
-        onClose={() => {
-          openEditAvatar(false);
-        }}
+        onClose={closeAllPopups}
       >
         <fieldset className="form__items">
           <div className="form__item">
@@ -63,9 +69,7 @@ function App() {
         title="Редактировать профиль"
         name="form-user"
         isOpen={isEditProfilePopupOpen}
-        onClose={() => {
-          openEditProfile(false);
-        }}
+        onClose={closeAllPopups}
       >
         <fieldset className="form__items">
           <div className="form__item">
@@ -98,9 +102,7 @@ function App() {
         title="Новое место"
         name="form-article"
         isOpen={isAddPlacePopupOpen}
-        onClose={() => {
-          openAddPlace(false);
-        }}
+        onClose={closeAllPopups}
       >
         <fieldset className="form__items">
           <div className="form__item">
@@ -134,15 +136,11 @@ function App() {
         name="accept"
         buttonText="Да"
         isOpen={isAcceptPopupOpen}
-        onClose={() => {
-          openAcceptPopup(false);
-        }}
+        onClose={closeAllPopups}
       ></PopupWithForm>
       <ImagePopup
         card={selectedCard}
-        onClose={() => {
-          openImagePopup(false);
-        }}
+        onClose={closeAllPopups}
         isOpen={isImagePopupOpen}
       />
       <Footer />
