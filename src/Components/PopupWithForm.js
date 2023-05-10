@@ -1,11 +1,19 @@
 function PopupWithForm({
+  formValid,
+  isLoadingForm,
   title,
   name,
   isOpen,
   onClose,
+  onSubmit,
   buttonText = "Сохранить",
+  buttonTextLoadingForm = "Сохранение...",
   children,
 }) {
+  function handleSubmitForm(data) {
+    onSubmit(data);
+  }
+
   return (
     <>
       <div
@@ -19,14 +27,21 @@ function PopupWithForm({
           />
           <h2 className="popup__title">{title}</h2>
           <form
+            onSubmit={handleSubmitForm}
             action="#"
             className="popup__form form"
             name={name}
             noValidate=""
           >
             {children}
-            <button type="submit" className="popup__btn">
-              {buttonText}
+            <button
+              type="submit"
+              className={`popup__btn ${
+                isLoadingForm || formValid ? "popup__btn_disable" : ""
+              }`}
+              disabled={isLoadingForm || formValid ? true : false}
+            >
+              {isLoadingForm ? buttonTextLoadingForm : buttonText}
             </button>
           </form>
         </div>

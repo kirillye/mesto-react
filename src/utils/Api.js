@@ -41,22 +41,22 @@ class Api {
     });
   }
 
-  putLike(id) {
-    return fetch(`${this.url}cards/${id}/likes `, {
-      method: "PUT",
-      headers: this.headers,
-    }).then((res) => {
-      return this._getResponseData(res);
-    });
-  }
-
-  removeLike(id) {
-    return fetch(`${this.url}cards/${id}/likes `, {
-      method: "DELETE",
-      headers: this.headers,
-    }).then((res) => {
-      return this._getResponseData(res);
-    });
+  changeLikeCardStatus(id, statur) {
+    if (statur) {
+      return fetch(`${this.url}cards/${id}/likes `, {
+        method: "DELETE",
+        headers: this.headers,
+      }).then((res) => {
+        return this._getResponseData(res);
+      });
+    } else {
+      return fetch(`${this.url}cards/${id}/likes `, {
+        method: "PUT",
+        headers: this.headers,
+      }).then((res) => {
+        return this._getResponseData(res);
+      });
+    }
   }
 
   removeCard(id) {
@@ -73,8 +73,8 @@ class Api {
       method: "PATCH",
       headers: this.headers,
       body: JSON.stringify({
-        name: data.userName,
-        about: data.userJob,
+        name: data.name,
+        about: data.about,
       }),
     }).then((res) => {
       return this._getResponseData(res);

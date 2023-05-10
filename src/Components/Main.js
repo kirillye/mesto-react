@@ -1,43 +1,24 @@
 import { useEffect, useState } from "react";
+import React from "react";
 import { api } from "../utils/Api.js";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import Card from "./Card";
 import Spinner from "./Spinner.js";
 
 function Main({
+  isLoading,
   avatar,
+  onCardLike,
+  onCardRemove,
+  cards,
+  handleCardsChange,
   handleEditAvatarClick,
   handleEditProfileClick,
   handleAddPlaceClick,
   handleCardClick,
   handleDeleteCard,
 }) {
-  const [userName, renameUser] = useState("");
-  const [userDescription, setDesc] = useState("");
-  const [userAvatar, setAvatar] = useState("");
-  const [cards, setCards] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-    Promise.all([api.getUserInfo(), api.getCards()])
-      .then((data) => {
-        renameUser(data[0].name);
-        setDesc(data[0].about);
-        setAvatar(data[0].avatar);
-        const cardsConfigFormServer = data[1];
-        const results = cardsConfigFormServer.map((item) => ({
-          name: item.name,
-          link: item.link,
-          likes: item.likes.length,
-          likeUsers: item.likes,
-          id: item._id,
-          owner: item.owner,
-        }));
-        setCards(results);
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setIsLoading(false));
-  }, []);
+  const currentUser = React.useContext(CurrentUserContext);
 
   return (
     <main>
@@ -49,21 +30,21 @@ function Main({
               onClick={handleEditAvatarClick}
             >
               <img
-                src={userAvatar}
+                src={currentUser.avatar}
                 alt="Аватар пользователя"
                 className="person__avatar"
               />
             </div>
             <div className="person__box">
               <div className="person__name-row">
-                <h1 className="person__title">{userName}</h1>
+                <h1 className="person__title">{currentUser.name}</h1>
                 <button
                   type="button"
                   className="person__btn-edit"
                   onClick={handleEditProfileClick}
                 />
               </div>
-              <h2 className="person__sub-title">{userDescription}</h2>
+              <h2 className="person__sub-title">{currentUser.about}</h2>
             </div>
           </div>
           <button
@@ -80,7 +61,9 @@ function Main({
           <ul className="articles__grid">
             {cards.map((item) => (
               <Card
-                key={item.id}
+                key={item._id}
+                onCardLike={onCardLike}
+                onCardRemove={onCardRemove}
                 onCardClick={handleCardClick}
                 openAcceptPopup={handleDeleteCard}
                 item={item}
