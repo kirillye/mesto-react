@@ -24,10 +24,6 @@ export default function EditProfilePopup({
   const currentUser = React.useContext(CurrentUserContext);
 
   function handleSubmit(e) {
-    console.log({
-      name: name,
-      about: description,
-    });
     e.preventDefault();
     onUpdateUser({
       name: name,
@@ -69,7 +65,6 @@ export default function EditProfilePopup({
             onChange={(e) => {
               checkField(e, 2, 40, setNameFieldError);
               setName(e.target.value);
-              console.log(name);
             }}
             type="text"
             className="popup__input popup__input_content_name"
