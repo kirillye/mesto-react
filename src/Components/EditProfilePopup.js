@@ -61,7 +61,7 @@ export default function EditProfilePopup({
         <div className="form__item">
           <input
             name="userName"
-            defaultValue={name}
+            value={name || ""}
             onChange={(e) => {
               checkField(e, 2, 40, setNameFieldError);
               setName(e.target.value);
@@ -79,7 +79,7 @@ export default function EditProfilePopup({
         <div className="form__item">
           <input
             name="userJob"
-            defaultValue={description}
+            value={description || ""}
             onChange={(e) => {
               setDescription(e.target.value);
               checkField(e, 2, 200, setAboutFieldError);

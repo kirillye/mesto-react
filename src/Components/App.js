@@ -19,9 +19,9 @@ function App() {
   const [isAddPlacePopupOpen, openAddPlace] = useState(false);
   const [isImagePopupOpen, openImagePopup] = useState(false);
   const [isAcceptPopupOpen, openAcceptPopup] = useState(false);
-  const [currentUser, setCurrentUser] = useState("");
-  const [currentCardDelete, setcurrentCardDelete] = useState("");
-  const [selectedCard, setSelectCard] = useState("");
+  const [currentUser, setCurrentUser] = useState({});
+  const [currentCardDelete, setCurrentCardDelete] = useState({});
+  const [selectedCard, setSelectCard] = useState({ name: "", link: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingForm, setIsLoadingForm] = useState(false);
   const httpRegex =
@@ -34,6 +34,7 @@ function App() {
     openEditProfile(false);
     openAddPlace(false);
     openImagePopup(false);
+    setSelectCard({ name: "", link: "" });
     openAcceptPopup(false);
   }
 
@@ -61,13 +62,13 @@ function App() {
     api
       .removeCard(currentCardDelete._id)
       .then((res) => {
+        closeAllPopups();
         setCards((state) =>
           state.filter((c) => !(c._id === currentCardDelete._id))
         );
       })
       .catch((err) => console.error(err))
       .finally(() => {
-        closeAllPopups();
         setIsLoadingForm(false);
       });
   }
@@ -77,11 +78,11 @@ function App() {
     api
       .sendUserInfo(data)
       .then((data) => {
+        closeAllPopups();
         setCurrentUser(data);
       })
       .catch((err) => console.error(err))
       .finally(() => {
-        closeAllPopups();
         setIsLoadingForm(false);
       });
   }
@@ -91,11 +92,11 @@ function App() {
     api
       .sendUserAvatar(data)
       .then((data) => {
+        closeAllPopups();
         setCurrentUser((state) => ({ ...state, avatar: data.avatar }));
       })
       .catch((err) => console.error(err))
       .finally(() => {
-        closeAllPopups();
         setIsLoadingForm(false);
       });
   }
@@ -105,13 +106,35 @@ function App() {
     api
       .sendCard(data)
       .then((newCard) => {
+        closeAllPopups();
         setCards([newCard, ...cards]);
       })
       .catch((err) => console.error(err))
       .finally(() => {
-        closeAllPopups();
         setIsLoadingForm(false);
       });
+  }
+
+  function handleEditAvatarClick(e) {
+    openEditAvatar(true);
+  }
+
+  function handleEditProfileClick(e) {
+    openEditProfile(true);
+  }
+
+  function handleAddPlaceClick(e) {
+    openAddPlace(true);
+  }
+
+  function handleCardClick(link) {
+    openImagePopup(true);
+    setSelectCard(link);
+  }
+
+  function handleDeleteCard(data) {
+    setCurrentCardDelete(data);
+    openAcceptPopup(true);
   }
 
   // Функции валидации форм
@@ -168,9 +191,9 @@ function App() {
   useEffect(() => {
     setIsLoading(true);
     Promise.all([api.getUserInfo(), api.getCards()])
-      .then((data) => {
-        handleCardsChange(data[1]);
-        setCurrentUser(data[0]);
+      .then(([userData, cards]) => {
+        handleCardsChange(cards);
+        setCurrentUser(userData);
       })
       .catch((err) => console.error(err))
       .finally(() => {
@@ -187,23 +210,11 @@ function App() {
         onCardLike={handleCardLike}
         handleCardsChange={handleCardsChange}
         cards={cards}
-        handleEditAvatarClick={(e) => {
-          openEditAvatar(true);
-        }}
-        handleEditProfileClick={(e) => {
-          openEditProfile(true);
-        }}
-        handleAddPlaceClick={(e) => {
-          openAddPlace(true);
-        }}
-        handleCardClick={(link) => {
-          openImagePopup(true);
-          setSelectCard(link);
-        }}
-        handleDeleteCard={(data) => {
-          setcurrentCardDelete(data);
-          openAcceptPopup(true);
-        }}
+        handleEditAvatarClick={handleEditAvatarClick}
+        handleEditProfileClick={handleEditProfileClick}
+        handleAddPlaceClick={handleAddPlaceClick}
+        handleCardClick={handleCardClick}
+        handleDeleteCard={handleDeleteCard}
       />
       <EditAvatarPopup
         checkLink={linkHandler}

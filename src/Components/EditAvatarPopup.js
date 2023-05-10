@@ -9,12 +9,12 @@ export default function EditAvatarPopup({
   isOpen,
   onClose,
 }) {
+  const [avatarLink, setAvatarLink] = useState("");
   const [formValid, setFormValid] = useState(false);
   const [linkFieldError, setLinkFieldError] = useState({
     falidField: false,
     textError: "",
   });
-  const avatarRef = React.useRef();
 
   function handleClosePopup() {
     onClose();
@@ -22,14 +22,13 @@ export default function EditAvatarPopup({
   }
 
   function handleResetForm() {
-    avatarRef.current.value = "";
+    setAvatarLink("");
     setLinkFieldError({ textError: "", falidField: false });
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    onUpdateAvatar(avatarRef.current.value);
-    handleResetForm();
+    onUpdateAvatar(avatarLink);
   }
 
   useEffect(() => {
@@ -53,14 +52,15 @@ export default function EditAvatarPopup({
       <fieldset className="form__items">
         <div className="form__item">
           <input
-            ref={avatarRef}
             name="userLinkImage"
             placeholder="Ссылка на картинку"
             type="url"
             className="popup__input"
             id="popup__user-link-avatar"
             required
+            value={avatarLink}
             onChange={(e) => {
+              setAvatarLink(e.target.value);
               checkLink(e, setLinkFieldError);
             }}
           />

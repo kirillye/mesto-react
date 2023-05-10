@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
+// import { useFormAndValidation } from "../hooks/useFormAndValidation";
 
 function AddPlacePopup({
   checkField,
@@ -10,6 +11,8 @@ function AddPlacePopup({
   isOpen,
   onClose,
 }) {
+  const [cardName, setCardName] = useState("");
+  const [cardImage, setCardImage] = useState("");
   const [formValid, setFormValid] = useState(false);
   const [linkFieldError, setLinkFieldError] = useState({
     falidField: false,
@@ -19,17 +22,14 @@ function AddPlacePopup({
     falidField: false,
     textError: "",
   });
-  const cardName = React.useRef();
-  const cardImage = React.useRef();
 
   function handleAddPlaceSubmit(e) {
     e.preventDefault();
     const data = {
-      articleTitle: cardName.current.value,
-      linkImage: cardImage.current.value,
+      articleTitle: cardName,
+      linkImage: cardImage,
     };
     onUpdateCards(data);
-    resetFormPopup();
   }
 
   function handleClosePopup() {
@@ -40,8 +40,8 @@ function AddPlacePopup({
   function resetFormPopup() {
     setLinkFieldError({ textError: "", falidField: false });
     setNameFieldError({ textError: "", falidField: false });
-    cardName.current.value = "";
-    cardImage.current.value = "";
+    setCardName("");
+    setCardImage("");
   }
 
   useEffect(() => {
@@ -66,9 +66,10 @@ function AddPlacePopup({
         <div className="form__item">
           <input
             onChange={(e) => {
+              setCardName(e.target.value);
               checkField(e, 2, 30, setNameFieldError);
             }}
-            ref={cardName}
+            value={cardName}
             name="articleTitle"
             placeholder="Название"
             type="text"
@@ -85,9 +86,10 @@ function AddPlacePopup({
         <div className="form__item">
           <input
             onChange={(e) => {
+              setCardImage(e.target.value);
               checkLink(e, setLinkFieldError);
             }}
-            ref={cardImage}
+            value={cardImage}
             name="linkImage"
             placeholder="Ссылка на картинку"
             type="url"

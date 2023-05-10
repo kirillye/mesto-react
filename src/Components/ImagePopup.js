@@ -1,5 +1,9 @@
+import { usePopupClose } from "../hooks/usePopupClose";
+
 function ImagePopup({ card, onClose, isOpen }) {
-  if (card) {
+  usePopupClose(card.link, onClose);
+
+  if (card && card.link) {
     return (
       <div
         className={`popup-image popup popup_type_image ${

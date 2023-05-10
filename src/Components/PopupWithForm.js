@@ -1,3 +1,5 @@
+import { usePopupClose } from "../hooks/usePopupClose";
+
 function PopupWithForm({
   formValid,
   isLoadingForm,
@@ -10,43 +12,33 @@ function PopupWithForm({
   buttonTextLoadingForm = "Сохранение...",
   children,
 }) {
-  function handleSubmitForm(data) {
-    onSubmit(data);
-  }
+  usePopupClose(isOpen, onClose);
 
   return (
-    <>
-      <div
-        className={`popup popup_type_${name} ${isOpen ? "popup_opend" : ""}`}
-      >
-        <div className="popup__container">
+    <div className={`popup popup_type_${name} ${isOpen ? "popup_opend" : ""}`}>
+      <div className="popup__container">
+        <button type="button" className="popup__btn-close" onClick={onClose} />
+        <h2 className="popup__title">{title}</h2>
+        <form
+          onSubmit={onSubmit}
+          action="#"
+          className="popup__form form"
+          name={name}
+          noValidate=""
+        >
+          {children}
           <button
-            type="button"
-            className="popup__btn-close"
-            onClick={onClose}
-          />
-          <h2 className="popup__title">{title}</h2>
-          <form
-            onSubmit={handleSubmitForm}
-            action="#"
-            className="popup__form form"
-            name={name}
-            noValidate=""
+            type="submit"
+            className={`popup__btn ${
+              isLoadingForm || formValid ? "popup__btn_disable" : ""
+            }`}
+            disabled={isLoadingForm || formValid ? true : false}
           >
-            {children}
-            <button
-              type="submit"
-              className={`popup__btn ${
-                isLoadingForm || formValid ? "popup__btn_disable" : ""
-              }`}
-              disabled={isLoadingForm || formValid ? true : false}
-            >
-              {isLoadingForm ? buttonTextLoadingForm : buttonText}
-            </button>
-          </form>
-        </div>
+            {isLoadingForm ? buttonTextLoadingForm : buttonText}
+          </button>
+        </form>
       </div>
-    </>
+    </div>
   );
 }
 
