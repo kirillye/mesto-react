@@ -24,6 +24,8 @@ function App() {
   const [selectedCard, setSelectCard] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingForm, setIsLoadingForm] = useState(false);
+  const httpRegex =
+    /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/;
   // const [linkFieldError, setLinkFieldError] = useState("  ");
   // const [nameFieldError, setNameFieldError] = useState("  ");
 
@@ -115,8 +117,6 @@ function App() {
   // Функции валидации форм
 
   function linkHandler(e, setLinkFieldError) {
-    const httpRegex =
-      /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
     if (httpRegex.test(String(e.target.value).toLocaleLowerCase())) {
       setLinkFieldError({
         textError: "",
